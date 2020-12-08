@@ -14,7 +14,7 @@ vb          bulk                gnd                 dc 0.0
 
 * MOSFET
 *mx..x <drain> <gate> <source> <bulk> <model name> <parameters>
-mn0     drain   gate    gnd     bulk         ptmn    W=1u L=150n
+mn0     drain   gate    gnd     gnd         ptmn    W=1u L=150n
 
 * DC Sweep 0.0 ≤ V_DS ≤ 1.2 and 0.0 ≤ V_GS ≤ 1.2
 .dc vd 0 1.2 0.01 vg 0 1.2 0.01
@@ -57,7 +57,7 @@ mn0     drain   gate    gnd     bulk         ptmn    W=1u L=150n
 
             run
 
-            wrdata ../../data/ptmn.out @mn0[W] @mn0[L]
+            wrdata ../../data/ptmn45.out @mn0[W] @mn0[L]
             + @mn0[vds] @mn0[vgs] @mn0[vbs] @mn0[vth] @mn0[vdsat]
             + @mn0[id]  @mn0[gbs] @mn0[gbd] @mn0[gds] @mn0[gm] @mn0[gmbs]
             + @mn0[cbb] @mn0[csb] @mn0[cdb] @mn0[cgb]

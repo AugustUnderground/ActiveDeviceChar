@@ -1,7 +1,7 @@
 * NMOS Characteristics
 
 * Include Model Files
-.include ../lib/45nm_PMOS_bulk63873.sp
+.include ../lib/90nm_PMOS_bulk17912.sp
 
 * Set Ambient Temperature
 .option TEMP=27C
