@@ -9,7 +9,7 @@ using DataFrames
 using Printf
 using ArgParse
 
-function csv2df(csvFile, mosType)
+function csv2df(csvFile)
     simData = CSV.File(csvFile, header=true, type=Float64) |> DataFrame;
 
     Cgg = simData[!, :cgg];
@@ -39,18 +39,18 @@ function csv2df(csvFile, mosType)
 
     data = DataFrame();
 
-    data[mosType == "n" ? "Vgs" : "Vgd"] = simData[mosType == "n" ? :vgs : :vgd]
-    data[mosType == "n" ? "Vds" : "Vsd"] = simData[mosType == "n" ? :vds : :vsd]
-    data[mosType == "n" ? "Vbs" : "Vbd"] = simData[mosType == "n" ? :vbs : :vbd]
-    data["W"]       = simData[!, :W];
-    data["L"]       = simData[!, :L];
-    data["vth"]     = simData[!, :vth];
-    data["vdsat"]   = simData[!, :vdsat];
-    data["id"]      = simData[!, :id];
-    data["gm"]      = simData[!, :gm];
-    data["gmb"]     = simData[!, :gmbs];
-    data["gds"]     = simData[!, :gds];
-    data["fug"]     = simData[!, :gm] ./ (2 .* π .* simData[!,:cgg]);
+    data["Vgs"]     = simData[:vgs]
+    data["Vds"]     = simData[:vds]
+    data["Vbs"]     = simData[:vbs]
+    data["W"]       = simData[:W];
+    data["L"]       = simData[:L];
+    data["vth"]     = simData[:vth];
+    data["vdsat"]   = simData[:vdsat];
+    data["id"]      = simData[:id];
+    data["gm"]      = simData[:gm];
+    data["gmb"]     = simData[:gmbs];
+    data["gds"]     = simData[:gds];
+    data["fug"]     = simData[:gm] ./ (2 .* π .* simData[:cgg]);
     data["cgd"]     = Cxx[1,:];
     data["cgb"]     = Cxx[2,:];
     data["cgs"]     = Cxx[3,:];
@@ -75,10 +75,6 @@ function parseArgs()
     settings = ArgParseSettings()
 
     @add_arg_table settings begin
-        "--mos", "-m"
-            help = "MOSFET Type"
-            arg_type = String
-            required = true
         "--type", "-t"
             help = "Output Type, can be either `jld` or `hdf`."
             arg_type = String
@@ -103,7 +99,6 @@ end
 function main()
     parsedArgs = parseArgs();
 
-    mosType = parsedArgs["mos"];
     csvFile = parsedArgs["csv"];
     outFile = parsedArgs["out"];
     outType = parsedArgs["type"];
@@ -116,15 +111,15 @@ function main()
 
     if verbose
         @printf("Converting %s to %s:\n", "csv", outType)
-        @printf("\t%s -> %s", csvFile, outFile)
+        @printf("\t%s -> %s\n", csvFile, outFile)
     end
 
     if verbose
-        @printf("Reading %s and Converting to DataFrame ...\n", csvFile)
-        df = @time csv2df(csvFile, mosType);
-        @printf("Done.\nStoring DataFrame as %s in %s", outType, outFile)
+        @printf("Reading %s and Converting to DataFrame ... ", csvFile)
+        df = @time csv2df(csvFile);
+        @printf("Done.\nStoring DataFrame as %s in %s\n", outType, outFile)
     else
-        df = csv2df(csvFile, mosType);
+        df = csv2df(csvFile);
     end
 
     if outType == "jld"

@@ -39,10 +39,10 @@ mn0     drain   gate    gnd     gnd         ptmn    W=1u L=150n
     set wr_singlescale
     set appendwrite
 
-    let init_w  = 500n
+    let init_w  = 750n
     let final_w = 5u
-    let delta_w = 100n
-    let curr_w  = 500n
+    let delta_w = 250n
+    let curr_w  = 750n
 
     while curr_w <= final_w
         alter @mn0[w] curr_w
@@ -57,7 +57,7 @@ mn0     drain   gate    gnd     gnd         ptmn    W=1u L=150n
 
             run
 
-            wrdata ../../data/ptmn45.out @mn0[W] @mn0[L]
+            wrdata ../data/ptmn45.out @mn0[W] @mn0[L]
             + @mn0[vds] @mn0[vgs] @mn0[vbs] @mn0[vth] @mn0[vdsat]
             + @mn0[id]  @mn0[gbs] @mn0[gbd] @mn0[gds] @mn0[gm] @mn0[gmbs]
             + @mn0[cbb] @mn0[csb] @mn0[cdb] @mn0[cgb]
