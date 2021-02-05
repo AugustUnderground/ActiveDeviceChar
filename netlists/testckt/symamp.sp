@@ -2,8 +2,8 @@
 
 *** Setup ***********************************************************************
 * Include Model Files
-.include ../lib/90nm_NMOS_bulk7675.sp
-.include ../lib/90nm_PMOS_bulk17912.sp
+.include ../lib/90nm_NMOS_bulk89211.sp
+.include ../lib/90nm_PMOS_bulk15176.sp
 
 * Set Ambient Temperature
 .option TEMP=27C

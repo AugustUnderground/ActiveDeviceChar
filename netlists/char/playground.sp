@@ -17,18 +17,18 @@ vd          drain               gnd                 dc 0.0
 
 * MOSFET
 *mx..x <drain> <gate> <source> <bulk> <model name> <parameters>
-mp0     drain   gate    gnd     gnd         ptmp    W=2u L=300n
+mn0     drain   gate    gnd     gnd         ptmp    W=2u L=300n
 *mn0     drain   gate    gnd     gnd         ptmn    W=2u L=300n
 
-.probe dc v(*) i(*)
+*.probe dc v(*) i(*)
 
 *.dc vg -1.2 0.0 0.01 vd -1.2 0.0 0.01
-.dc vd -1.2 0.0 0.01 vg -1.2 0.0 0.01
+*.dc vd -1.2 0.0 0.01 vg -1.2 0.0 0.01
 
 *.dc vg 0.0 1.2 0.1 vd 0.0 1.2 0.01
 *.dc vd 0.0 1.2 0.01 vg 0.0 1.2 0.1
 
-.save all
+*.save all
 *.control
 *.endc
 
