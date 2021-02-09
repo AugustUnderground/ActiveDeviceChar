@@ -1,6 +1,6 @@
 * Single-Ended Two-Stage OTA
 
-*** Setup ***********************************************************************
+*** Setup ********************************************************************
 * Include Model Files
 .include ../lib/90nm_NMOS_bulk89211.sp
 .include ../lib/90nm_PMOS_bulk15176.sp
@@ -9,28 +9,36 @@
 .option TEMP=27C
 
 * Design Paramters
-.param VDD=1.2 VSS=0.0
-.param L12=270n L346=270n L578=270n
-.param W12=1.5u W34=4u W58=5u W6=10u W7=7u
-.param VICM=0.6 VOCM=0.6
-.param IREF=15u
-.param CLOAD=10p
+.param VDD  = 1.2
+.param VSS  = 0.0
+.param L12  = 340n
+.param L346 = 340n
+.param L578 = 340n
+.param W12  = 2.1u
+.param W34  = 6.3u
+.param W58  = 6.6u
+.param W6   = 62u
+.param W7   = 50u
+.param VICM = 0.6
+.param VOCM = 0.6
+.param IREF = 15u
+.param CL   = 10p
 
-*** Netlist **********************************************************************
+*** Netlist ******************************************************************
 
 * Current/Voltage Sources
 *vx..x <positive terminal> <negative terminal> <parameters>
 
 vdd         DD                  gnd                 {VDD}
-vip         ICMP                gnd                 {VICM} ac  1.0
-vin         ICMN                gnd                 {VICM} ac -1.0
+vip         ICMP                gnd                 {VICM} ac   0.0
+vin         ICMN                gnd                 {VICM} ac   180.0
 
 *vicm        ICM                 gnd                 VICM
 *vocm        OCM                 gnd                 {VOCM}
 
 iref        REF                 gnd                 {IREF}
 
-* MOSFET
+* MOSFETs
 *mx..x <drain> <gate> <source> <bulk> <model name> <parameters>
 
 * Differential Pair
@@ -51,9 +59,9 @@ mn7     OCM    REF      gnd     gnd     ptmn        w=W7  l=L578
 
 * Load Capacitance
 *cx..x <positive terminal> <negative terminal> <parameters>
-cl          OCM                gnd                 {CLOAD}
+cload       OCM                gnd                 {CL}
 
-*** Simulation ********************************************************************
+*** Simulation ***************************************************************
 .control
 
 * AC Analysis 10 points per decade from 1Hz to 100GHz
@@ -79,8 +87,7 @@ meas ac zdb_f when vdb(OCM) = 0
 let cutoff = dc_gain - 3
 meas ac cdb_f when vdb(OCM) = cutoff
 
-*plot vdb(vout) phase
-*plot vdb(O) ph(O)
+plot vdb(OCM) ph(OCM)
 *print gm_db pm_deg zdb_f cdb_f dc_gain
 
 * Save Results
