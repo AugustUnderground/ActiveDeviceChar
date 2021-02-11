@@ -39,31 +39,40 @@ mp0     drain   gate    gnd     gnd     ptmp        W=1u L=150
     set wr_singlescale
     set appendwrite
 
-    let init_w  = 750n
-    let final_w = 5u
-    let delta_w = 250n
-    let curr_w  = 750n
+    let final_w = 10.0u
+    let delta_w = 0.5u
+    let curr_w  = 0.5u
 
     while curr_w <= final_w
-        alter @mp0[w] curr_w
+        alter @mp0[w] = curr_w
 
-        let init_l  = 150n
-        let final_l = 1.5u
-        let delta_l = 100n
-        let curr_l  = 150n
+        let final_l = 500n
+        let delta_l = 50n
+        let curr_l  = 50n
 
         while curr_l <= final_l
-            alter @mp0[L] curr_l
+            alter @mp0[L] = curr_l
+            
+            let final_b = 1.2
+            let delta_b = 0.1
+            let curr_b  = 0.0
 
-            run
+            while curr_b <= final_b
+                alter vb dc = curr_b
+ 
+                run
 
-            wrdata ../data/ptmp45.out @mp0[W] @mp0[L]
-            + @mp0[vds] @mp0[vgs] @mp0[vbs] @mp0[vth] @mp0[vdsat]
-            + @mp0[id]  @mp0[gbs] @mp0[gbd] @mp0[gds] @mp0[gm] @mp0[gmbs]
-            + @mp0[cbb] @mp0[csb] @mp0[cdb] @mp0[cgb]
-            + @mp0[css] @mp0[csd] @mp0[csg] @mp0[cds]
-            + @mp0[cdd] @mp0[cdg] @mp0[cbs] @mp0[cbd]
-            + @mp0[cbg] @mp0[cgd] @mp0[cgs] @mp0[cgg]
+                wrdata ../../data/ptmp45.out @mp0[W] @mp0[L]
+                + @mp0[vds] @mp0[vgs] @mp0[vbs] @mp0[vth] @mp0[vdsat]
+                + @mp0[id]  @mp0[gbs] @mp0[gbd] @mp0[gds] @mp0[gm] @mp0[gmbs]
+                + @mp0[cbb] @mp0[csb] @mp0[cdb] @mp0[cgb]
+                + @mp0[css] @mp0[csd] @mp0[csg] @mp0[cds]
+                + @mp0[cdd] @mp0[cdg] @mp0[cbs] @mp0[cbd]
+                + @mp0[cbg] @mp0[cgd] @mp0[cgs] @mp0[cgg]
+            
+                let curr_b = curr_b + delta_b
+                unset wr_vecnames
+            end
 
             let curr_l = curr_l + delta_l
             unset wr_vecnames

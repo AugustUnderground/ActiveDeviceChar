@@ -39,16 +39,16 @@ mp0     drain   gate    gnd     bulk        ptmp    W=1u L=300n
     set wr_singlescale
     set appendwrite
 
-    let final_w = 10.0u
+    let final_w = 50.0u
     let delta_w = 0.5u
     let curr_w  = 1.0u
 
     while curr_w <= final_w
         alter @mp0[w] = curr_w
 
-        let final_l = 3.0u
-        let delta_l = 250n
-        let curr_l  = 250n
+        let final_l = 1.0u
+        let delta_l = 100n
+        let curr_l  = 100n
 
         while curr_l <= final_l
             alter @mp0[l] = curr_l
