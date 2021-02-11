@@ -1,4 +1,4 @@
-* PMOS Characteristics
+* PTM PMOS 90nm Characteristics
 
 * Include Model Files
 .include ../lib/90nm_PMOS_bulk15176.sp

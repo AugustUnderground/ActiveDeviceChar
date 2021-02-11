@@ -1,4 +1,4 @@
-* NMOS Charateristics
+* PTM NMOS 90nm Charateristics
 
 * Include Model Files
 .include ../lib/90nm_NMOS_bulk89211.sp

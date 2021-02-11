@@ -1,4 +1,4 @@
-* NMOS Characteristics
+* PTM PMOS 45nm Characteristics
 
 * Include Model Files
 .include ../lib/45nm_PMOS_bulk63873.sp
