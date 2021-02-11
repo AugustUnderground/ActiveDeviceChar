@@ -14,7 +14,7 @@ vb          bulk                gnd                 dc 0.0
 
 * MOSFET
 *mx..x <drain> <gate> <source> <bulk> <model name> <parameters>
-mn0     drain   gate    gnd     gnd         ptmn    W=1u L=150n
+mn0     drain   gate    gnd     bulk        ptmn    W=1u L=150n
 
 * DC Sweep 0.0 ≤ V_DS ≤ 1.2 and 0.0 ≤ V_GS ≤ 1.2
 .dc vd 0 1.2 0.01 vg 0 1.2 0.01
@@ -39,26 +39,20 @@ mn0     drain   gate    gnd     gnd         ptmn    W=1u L=150n
     set wr_singlescale
     set appendwrite
 
-    let final_w = 10.0u
-    let delta_w = 0.5u
-    let curr_w  = 0.5u
+    compose widths  log=10 start=50n stop=50.0u
+    compose lengths log=10 start=50n stop=5.0u
+    compose bulks   start=0.0 stop=-1.0 step=-0.1
 
-    while curr_w <= final_w
-        alter @mn0[w] = curr_w
+    let counter = 0
 
-        let final_l = 500n
-        let delta_l = 50n
-        let curr_l  = 50n
+    foreach wid $&widths
+        alter @mn0[w] = $wid
 
-        while curr_l <= final_l
-            alter @mn0[L] = curr_l
+        foreach len $&lengths
+            alter @mn0[L] = $len
 
-            let final_b = -1.2
-            let delta_b = 0.1
-            let curr_b  = 0.0
-
-            while curr_b >= final_b
-                alter vb dc = curr_b
+            foreach blk $&bulks
+                alter vb dc = $blk
 
                 run
 
@@ -70,14 +64,14 @@ mn0     drain   gate    gnd     gnd         ptmn    W=1u L=150n
                 + @mn0[cdd] @mn0[cdg] @mn0[cbs] @mn0[cbd]
                 + @mn0[cbg] @mn0[cgd] @mn0[cgs] @mn0[cgg]
 
-                let curr_b = curr_b - delta_b
                 unset wr_vecnames
-            end
 
-            let curr_l = curr_l + delta_l
+                let counter = counter + 1
+                echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                echo Iteration $&counter Complete
+                echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            end
         end
-        
-        let curr_w = curr_w + delta_w
     end
 
 .endc

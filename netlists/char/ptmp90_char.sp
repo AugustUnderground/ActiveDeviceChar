@@ -39,26 +39,20 @@ mp0     drain   gate    gnd     bulk        ptmp    W=1u L=300n
     set wr_singlescale
     set appendwrite
 
-    let final_w = 50.0u
-    let delta_w = 0.5u
-    let curr_w  = 1.0u
+    compose widths  log=10 start=100n stop=100.0u
+    compose lengths log=10 start=100n stop=10.0u
+    compose bulks   start=0.0 stop=1.0 step=0.1
 
-    while curr_w <= final_w
-        alter @mp0[w] = curr_w
+    let counter = 0
 
-        let final_l = 1.0u
-        let delta_l = 100n
-        let curr_l  = 100n
+    foreach wid $&widths
+        alter @mp0[w] = $wid
 
-        while curr_l <= final_l
-            alter @mp0[l] = curr_l
+        foreach len $&lengths
+            alter @mp0[l] = $len
 
-            let final_b = 1.2
-            let delta_b = 0.1
-            let curr_b  = 0.0
-
-            while curr_b <= final_b
-                alter vb dc = curr_b
+            foreach blk $&bulks
+                alter vb dc = $blk
                 
                 run
 
@@ -70,14 +64,14 @@ mp0     drain   gate    gnd     bulk        ptmp    W=1u L=300n
                 + @mp0[cdd] @mp0[cdg] @mp0[cbs] @mp0[cbd]
                 + @mp0[cbg] @mp0[cgd] @mp0[cgs] @mp0[cgg]
 
-                let curr_b = curr_b + delta_b
                 unset wr_vecnames
+                
+                let counter = counter + 1
+                echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                echo Iteration $&counter Complete
+                echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~
             end
-
-            let curr_l = curr_l + delta_l
         end
-        
-        let curr_w = curr_w + delta_w
     end
 
 .endc
