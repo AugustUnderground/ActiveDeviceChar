@@ -2,4 +2,4 @@
 *.raw
 *.csv
 data
-netlists/lib/*
+lib/*
